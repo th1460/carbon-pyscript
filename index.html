@@ -9,6 +9,7 @@
 <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
 <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/ui-shell.min.js"></script>
 <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/input.min.js"></script>
+<script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/button.min.js"></script>
 <script>
     
 </script>
@@ -31,19 +32,26 @@
 <div class="bx--grid">
     <div class="bx--row", style="margin-top:5rem">
         <div class="bx--col">
-            <bx-input id="input">
+            <bx-input id="input" value="https://raw.githubusercontent.com/th1460/carbon-pyscript/main/titanic.csv">
                 <span slot="label-text">Type a url with .csv data</span>
             </bx-input>
+            <bx-btn id="button">Button</bx-btn>
         </div>
         <div class="bx--col">
+            
          <py-script>
              from pyodide import create_proxy
-             def get_input(event):
-                pyscript.write("result", event.detail.value)
+             import pandas as pd
+             from pyodide.http import open_url
 
-             document.getElementById("input").addEventListener("bx-slider-changed", create_proxy(get_input))
+             def send_data(event):
+                df = pd.read_csv(open_url(document.getElementById("input").value))
+                pyscript.write('csv', df.head())
+
+             document.getElementById("button").addEventListener("click", create_proxy(send_data))
+
          </py-script>
-         <h1 id="result"></h1>
+            <p id="csv"></p>
         </div>
     </div>
 </div>
