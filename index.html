@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Carbon with Pyscript</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css"/>
+<link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"/>
+<link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/grid.css"/>
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+<script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/ui-shell.min.js"></script>
+<script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/input.min.js"></script>
+<script>
+    
+</script>
+<style>
+    bx-header:not(:defined) {
+      display: none;
+    }
+  </style>
+  <py-env>
+    - pandas
+   </py-env>
+</head>
+<body>
+<bx-header aria-label="Carbon with Pyscript">
+    <bx-header-name href="javascript:void 0" prefix="Carbon">with Pyscript</bx-header-name>
+    <bx-header-nav menu-bar-label="Carbon with Pyscript">
+    </bx-header-nav>
+  </bx-header>
+
+<div class="bx--grid">
+    <div class="bx--row", style="margin-top:5rem">
+        <div class="bx--col">
+            <bx-input id="input">
+                <span slot="label-text">Type a url with .csv data</span>
+            </bx-input>
+        </div>
+        <div class="bx--col">
+         <py-script>
+             from pyodide import create_proxy
+             def get_input(event):
+                pyscript.write("result", event.detail.value)
+
+             document.getElementById("input").addEventListener("bx-slider-changed", create_proxy(get_input))
+         </py-script>
+         <h1 id="result"></h1>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
+
