@@ -10,9 +10,7 @@
 <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/ui-shell.min.js"></script>
 <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/input.min.js"></script>
 <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/button.min.js"></script>
-<script>
-    
-</script>
+<script type="module" src="https://1.www.s81c.com/common/carbon/web-components/version/v1.21.0/dropdown.min.js"></script>
 <style>
     bx-header:not(:defined) {
       display: none;
@@ -35,10 +33,13 @@
             <bx-input id="input" value="https://raw.githubusercontent.com/th1460/carbon-pyscript/main/titanic.csv">
                 <span slot="label-text">Type a url with .csv data</span>
             </bx-input>
-            <bx-btn id="button">Button</bx-btn>
+            <bx-btn id="button">Send</bx-btn>
+            <br>
+            <br>
+            <bx-dropdown id="vars", label-text="Variables" value=""></bx-dropdown>
         </div>
         <div class="bx--col">
-            
+            <p id="count"></p> 
          <py-script>
              from pyodide import create_proxy
              import pandas as pd
@@ -46,12 +47,26 @@
 
              def send_data(event):
                 df = pd.read_csv(open_url(document.getElementById("input").value))
-                pyscript.write('csv', df.head())
+                vars = df.columns.to_list()
+                parent = document.getElementById("vars")
+                for var in vars:
+                    item = document.createElement('bx-dropdown-item')
+                    item.textContent = var
+                    item.setAttribute('value', var.lower())
+                    parent.appendChild(item)
 
              document.getElementById("button").addEventListener("click", create_proxy(send_data))
 
+             def get_analysis(event):
+                df = pd.read_csv(open_url(document.getElementById("input").value))
+                df.columns = df.columns.str.lower()
+                count = df[event.detail.item.value].value_counts()
+                count = count.to_frame(name="n")
+                pyscript.write("count", count.to_html())
+
+             document.getElementById("vars").addEventListener("bx-dropdown-selected", create_proxy(get_analysis))
+
          </py-script>
-            <p id="csv"></p>
         </div>
     </div>
 </div>
