@@ -4,7 +4,6 @@
 <title>Carbon with Pyscript</title>
 <meta charset="UTF-8" />
 <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css"/>
-<link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"/>
 <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/grid.css"/>
 <link rel="stylesheet" href="https://unpkg.com/@carbon/charts/styles.css" />
 <script defer src="https://pyscript.net/latest/pyscript.js"></script>
@@ -28,7 +27,6 @@
     <bx-header-nav menu-bar-label="Carbon with Pyscript">
     </bx-header-nav>
   </bx-header>
-
 <div class="bx--grid">
     <div class="bx--row", style="margin-top:5rem">
         <div class="bx--col">
@@ -57,7 +55,7 @@
                     item.textContent = var
                     item.setAttribute('value', var.lower())
                     parent.appendChild(item)
-            
+           
              js.document.getElementById("button").addEventListener("click", create_proxy(send_data))
 
              def get_analysis(event):
@@ -71,32 +69,34 @@
                 objects = []
                 for i in count:
                     objects.append(js.Object.fromEntries(to_js(i)))
-                js.plot(objects)
+                js.plot(objects, event.detail.item.value)
                 
              js.document.getElementById("vars").addEventListener("bx-dropdown-selected", create_proxy(get_analysis))
          </py-script>
             <script>
-                function plot(count) {
+                function plot(count, title) {
                     document.getElementById('plot').innerHTML = '';
                     const chartHolder = document.getElementById('plot');
-                    new Charts.StackedBarChart(chartHolder, {
-                    data: Array.from(count),
-                        options: {
-                    title: 'Graph',
-                    axes: {
-                    left: {
-                        mapsTo: 'value'
-                    },
-                    bottom: {
-                        mapsTo: 'group',
-                        scaleType: 'labels'
+                    const data = Array.from(count);
+                    const options = {
+                        title: "Distribution of " + title,
+                        axes: {
+                        left: {
+                            mapsTo: 'value'
+                        },
+                        bottom: {
+                            mapsTo: 'group',
+                            scaleType: 'labels'
+                        }
+                        },
+                        height: '400px',
+                        width: '400px'
                     }
-                    },
-                    height: '400px',
-                    width: '400px'
-                    }})
-                }
-           
+
+                    new Charts.StackedBarChart(chartHolder, {
+                        data,
+                        options}
+                    )}
           </script>
         </div>
     </div>
